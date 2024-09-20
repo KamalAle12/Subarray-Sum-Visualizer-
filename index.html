@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subarray Sum Visualizer with Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .input-container {
+            margin-bottom: 20px;
+        }
+        
+        .input-container input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        #visualization-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .box {
+            width: 50px;
+            height: 50px;
+            background-color: lightgray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 5px;
+            transition: background-color 0.5s, transform 0.5s;
+        }
+        
+        .box.highlight {
+            background-color: yellow;
+        }
+        
+        #steps {
+            text-align: left;
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.5s;
+        }
+        
+        .highlight-step {
+            background-color: #ffff99;
+        }
+        
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .code-block {
+            background-color: #000;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            display: inline-block;
+            text-align: left;
+            margin: 0 auto;
+        }
+        
+        .copy-button {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .copy-button:hover {
+            background-color: #005ea6;
+        }
+        
+        footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 30px;
+            color: #777;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Subarray Sum Visualizer with Animation</h1>
+    <div class="container"></div>
+    <h1>560. Subarray Sum Equals K</h1>
+
+    <div class="section">
+        <p>Given an array of integers <strong>nums</strong> and an integer <strong>k</strong>, return the total number of subarrays whose sum equals to <strong>k</strong>.</p>
+        <p>A subarray is a contiguous non-empty sequence of elements within an array.</p>
+    </div>
+
+    <div class="section">
+        <h3>Example 1:</h3>
+        <div class="example">
+            <p><strong>Input:</strong> nums = [1, 1, 1], k = 2</p>
+            <p><strong>Output:</strong> 2</p>
+        </div>
+
+        <h3>Example 2:</h3>
+        <div class="example">
+            <p><strong>Input:</strong> nums = [1, 2, 3], k = 3</p>
+            <p><strong>Output:</strong> 2</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Constraints:</h3>
+        <div class="constraints">
+            <ul>
+                <li>1
+                    <=n ums.length <=2 * 10<sup>4</sup>
+                </li>
+                <li>-1000
+                    <=n ums[i] <=1 000</li>
+                        <li>-10<sup>7</sup>
+                            <=k <=1 0<sup>7</sup>
+                        </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>Difficulty: Medium | Topics: Arrays, Hashmaps</p>
+    </footer>
+
+    <p>Enter the array of integers and a target sum (k). The visualizer will show how many subarrays sum up to k.</p>
+
+    <div class="input-container">
+        <label for="array-input">Array (comma separated):</label>
+        <input type="text" id="array-input" placeholder="e.g. 1,2,3">
+
+        <label for="target-input">Target Sum (k):</label>
+        <input type="number" id="target-input" placeholder="e.g. 3">
+
+        <button onclick="startVisualization()">Start Visualization</button>
+    </div>
+
+    <div id="visualization-container"></div>
+    <div id="steps"></div>
+    <div id="result"></div>
+
+    <div class="container1">
+        <h1>Java Code: Subarray Sum Equals K</h1>
+        <button class="copy-button" id="copy-button" onclick="copyCode()">Copy Code</button>
+        <pre class="code-block" id="code-block">
+<span class="keyword">class</span> <span class="class-name">Solution</span> {
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="function-name">subarraySum</span>(<span class="keyword">int</span>[] <span class="variable">nums</span>, <span class="keyword">int</span> <span class="variable">k</span>) {
+        <span class="class-name">Map</span>&lt;<span class="keyword">Integer</span>, <span class="keyword">Integer</span>&gt; <span class="variable">map</span> = <span class="keyword">new</span> <span class="class-name">HashMap</span>&lt;&gt;();
+        <span class="variable">map</span>.<span class="function-name">put</span>(<span class="variable">0</span>, <span class="variable">1</span>);
+        <span class="keyword">int</span> <span class="variable">count</span> = <span class="variable">0</span>;
+        <span class="keyword">int</span> <span class="variable">sum</span> = <span class="variable">0</span>;
+
+        <span class="keyword">for</span>(<span class="keyword">int</span> <span class="variable">num</span> : <span class="variable">nums</span>) {
+            <span class="variable">sum</span> += <span class="variable">num</span>;
+            <span class="keyword">int</span> <span class="variable">diff</span> = <span class="variable">sum</span> - <span class="variable">k</span>;
+            <span class="keyword">if</span>(<span class="variable">map</span>.<span class="function-name">containsKey</span>(<span class="variable">diff</span>)) {
+                <span class="variable">count</span> += <span class="variable">map</span>.<span class="function-name">get</span>(<span class="variable">diff</span>);
+            }
+            <span class="variable">map</span>.<span class="function-name">put</span>(<span class="variable">sum</span>, <span class="variable">map</span>.<span class="function-name">getOrDefault</span>(<span class="variable">sum</span>, <span class="variable">0</span>) + <span class="variable">1</span>);
+        }
+
+        <span class="keyword">return</span> <span class="variable">count</span>;
+    }
+}
+        </pre>
+    </div>
+
+    <script>
+        function startVisualization() {
+            const arrayInput = document.getElementById('array-input').value;
+            const targetInput = parseInt(document.getElementById('target-input').value);
+            const nums = arrayInput.split(',').map(Number);
+            const resultContainer = document.getElementById('result');
+            const visualizationContainer = document.getElementById('visualization-container');
+            const stepsContainer = document.getElementById('steps');
+
+            visualizationContainer.innerHTML = '';
+            stepsContainer.innerHTML = '';
+            resultContainer.innerHTML = '';
+
+            let count = 0;
+            const steps = [];
+
+            // Visualizing the input numbers
+            nums.forEach(num => {
+                const box = document.createElement('div');
+                box.className = 'box';
+                box.innerText = num;
+                visualizationContainer.appendChild(box);
+            });
+
+            // Finding subarrays with the given sum
+            for (let start = 0; start < nums.length; start++) {
+                let sum = 0;
+                for (let end = start; end < nums.length; end++) {
+                    sum += nums[end];
+                    if (sum === targetInput) {
+                        count++;
+                        steps.push(`Subarray found: [${nums.slice(start, end + 1).join(', ')}]`);
+                        highlightSubarray(start, end);
+                    }
+                }
+            }
+
+            // Showing steps and result
+            steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.innerText = step;
+                stepsContainer.appendChild(stepDiv);
+            });
+
+            resultContainer.innerText = `Total subarrays with sum ${targetInput}: ${count}`;
+        }
+
+        function highlightSubarray(start, end) {
+            const boxes = document.querySelectorAll('.box');
+            for (let i = start; i <= end; i++) {
+                boxes[i].classList.add('highlight');
+                // Use a timeout for animation effect
+                setTimeout(() => {
+                    boxes[i].classList.remove('highlight');
+                }, 1000);
+            }
+        }
+
+        function copyCode() {
+            const codeBlock = document.getElementById('code-block');
+            const range = document.createRange();
+            range.selectNode(codeBlock);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            alert('Java code copied to clipboard!');
+        }
+    </script>
+</body>
+
+</html>
